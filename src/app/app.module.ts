@@ -7,6 +7,11 @@ import { RegisterComponent } from './auth/register/register.component';
 import { LoginComponent } from './auth/login/login.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppHeaderComponent } from './app-header/app-header.component';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
+import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DomPlaceHolder } from './shared/domplaceholder.directive';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -15,13 +20,17 @@ import { AppHeaderComponent } from './app-header/app-header.component';
     RegisterComponent,
     LoginComponent,
     AppHeaderComponent,
-
+    SpinnerComponent,
+    DomPlaceHolder,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
-   ],
+    NgbModule,
+    AppRoutingModule,
+    FormsModule,
+    HttpClientModule,
+  ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
