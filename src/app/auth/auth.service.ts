@@ -30,7 +30,7 @@ export class AuthService {
   }
 
   constructor(private router: Router, private httpClient: HttpClient) {
-    if (this.userCache.length) {
+    if (this.userCache?.length) {
       let lastUser = this.userCache[this.userCache.length - 1];
       this.refreshToken(
         lastUser.refreshTokens[lastUser.refreshTokens.length - 1],
@@ -97,31 +97,35 @@ export class AuthService {
 
   register(username: string, email: string, password: string) {
     return this.httpClient
-      .post<AuthResponse>(`${environment.apiUrl}/Register`, {
+      .post<{ Errors: string }>(`${environment.apiUrl}/Register`, {
         Username: username,
         Email: email,
         Password: password,
       })
       .pipe(
         map((resp) => {
-          if (resp.errors === null) {
+          if (resp.Errors === null) {
             this.requestConfirmationEmail(email, '');
           }
+          return resp;
         })
       );
   }
 
   requestConfirmationEmail(email: string, callbackUrl: string) {
-    return this.httpClient.post<{errors:string}>(`${environment.apiUrl}/Register`, {
-      Email: email,
-      CallbackURL: callbackUrl,
-    }).pipe(
-      map((resp) => {
-        if (resp.errors === null) {
-          this.router.navigate()
-        }
+    return this.httpClient
+      .post<{ Errors: string }>(`${environment.apiUrl}/Register`, {
+        Email: email,
+        CallbackURL: callbackUrl,
       })
-    );
+      .pipe(
+        map((resp) => {
+          if (resp.Errors === null) {
+            this.router.navigate(['..;']);
+          }
+          return resp;
+        })
+      );
   }
 
   refreshToken(refreshToken: string, redirectToHome: boolean = false) {
@@ -133,7 +137,12 @@ export class AuthService {
         map((resp: RefreshTokenResponse) => {
           if (resp.errors === null) {
             this.userSubject.next(
-              new User(this.CurrentUser?.id ?? '', resp.email, resp.jwtToken)
+              new User(
+                this.CurrentUser.id,
+                this.CurrentUser.username,
+                resp.email,
+                resp.jwtToken
+              )
             );
             let activeUser = this.userCache.find((x) => x.email === resp.email);
             activeUser.refreshTokens.push(resp.refreshToken);

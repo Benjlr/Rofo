@@ -9,7 +9,7 @@ export class User {
   ) {}
 
   public static FromResponse(inputData: AuthResponse){
-    return new User(inputData.id, inputData.email, inputData.jwtToken);
+    return new User(inputData.id, inputData.username, inputData.email, inputData.jwtToken);
   }
 
   get JwtToken(){
