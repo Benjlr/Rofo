@@ -104,25 +104,21 @@ export class AuthService {
       })
       .pipe(
         map((resp) => {
-          if (resp.Errors === null) {
-            this.requestConfirmationEmail(email, '');
-          }
+
           return resp;
         })
       );
   }
 
-  requestConfirmationEmail(email: string, callbackUrl: string) {
+  requestConfirmationEmail(email: string, password: string, callbackUrl: string) {
     return this.httpClient
-      .post<{ Errors: string }>(`${environment.apiUrl}/Register`, {
+      .post<{ Errors: string }>(`${environment.apiUrl}/Register/request-email-confirmation`, {
         Email: email,
+        Password: password,
         CallbackURL: callbackUrl,
       })
       .pipe(
         map((resp) => {
-          if (resp.Errors === null) {
-            this.router.navigate(['..;']);
-          }
           return resp;
         })
       );

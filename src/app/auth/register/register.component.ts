@@ -44,7 +44,7 @@ export class RegisterComponent implements OnInit {
       Errors: string;
     }>();
 
-    registerObs = this.authService.register(form.value.Username, form.value.Email, form.value.password);
+    registerObs = this.authService.register(form.value.Username, form.value.email, form.value.password);
     registerObs.subscribe(
       (respData: { Errors: string }) => {
         console.log(respData);
@@ -52,8 +52,36 @@ export class RegisterComponent implements OnInit {
         if (respData.Errors) {
           this.error = respData.Errors;
         }
+        else{
+          this.RequestAccountConfirmationEmail(form);
+        }
         this.alertHost.viewcontainerRef.clear();
         this.router.navigate(['']);
+
+      },
+      (err) => {
+        console.log(err.message ?? err);
+        this.error = err.message ?? err;
+        this.isLoading = false;
+        this.alertHost.viewcontainerRef.clear();
+      }
+    );
+  }
+
+  RequestAccountConfirmationEmail(form: NgForm){
+    let acoountConfirmObs : Observable<{ Errors: string }> = new Observable<{
+      Errors: string;
+    }>();
+    acoountConfirmObs = this.authService.requestConfirmationEmail(form.value.email, form.value.password, 'login');
+    acoountConfirmObs.subscribe(
+      (respData: { Errors: string }) => {
+        console.log(respData);
+        this.isLoading = false;
+        if (respData.Errors) {
+          this.error = respData.Errors;
+        }
+        this.alertHost.viewcontainerRef.clear();
+        this.router.navigate(['/email-sent']);
       },
       (err) => {
         console.log(err.message ?? err);
