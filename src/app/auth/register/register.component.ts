@@ -84,8 +84,8 @@ export class RegisterComponent implements OnInit {
         this.router.navigate(['/email-sent']);
       },
       (err) => {
-        console.log(err.message ?? err);
-        this.error = err.message ?? err;
+        console.log(err.status ?? err);
+        this.error = (err.status) ?? err;
         this.isLoading = false;
         this.alertHost.viewcontainerRef.clear();
       }
