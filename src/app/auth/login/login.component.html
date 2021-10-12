@@ -137,17 +137,21 @@
         </div>
       </div>
     </div>
-
   </section>
   <div class="container">
     <div class="row justify-content-center">
-        <div
-          class="alert alert-danger"
-          style="width: max-content"
-          *ngIf="error"
-        >
-          <p style="text-align: center">{{ error }}</p>
-        </div>
+      <div class="alert alert-danger" style="width: max-content" *ngIf="error">
+        <p style="text-align: center">{{ error }}</p>
       </div>
+    </div>
+    <div class="row justify-content-center">
+      <div
+        class="alert alert-success"
+        style="width: max-content"
+        *ngIf="success"
+      >
+        <p style="text-align: center">{{ success }}</p>
+      </div>
+    </div>
   </div>
 </main>

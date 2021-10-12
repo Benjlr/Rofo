@@ -21,6 +21,7 @@ export class RegisterComponent implements OnInit {
   focus1;
   focus2;
   error: string = '';
+  success: string = '';
   isLoading = false;
   @ViewChild(DomPlaceHolder, { static: false })
   alertHost!: DomPlaceHolder;
@@ -77,11 +78,13 @@ export class RegisterComponent implements OnInit {
       (respData: { Errors: string }) => {
         console.log(respData);
         this.isLoading = false;
+        this.alertHost.viewcontainerRef.clear();
         if (respData.Errors) {
           this.error = respData.Errors;
         }
-        this.alertHost.viewcontainerRef.clear();
-        this.router.navigate(['/email-sent']);
+        else{
+          this.success = 'Email sent successfully'
+        }
       },
       (err) => {
         console.log(err.status ?? err);

@@ -13,6 +13,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DomPlaceHolder } from './shared/domplaceholder.directive';
 import { HttpClientModule } from '@angular/common/http';
 import { ConfirmationEmailComponent } from './auth/confirmation-email/confirmation-email.component';
+import { CreateGroupComponent } from './auth/create-group/create-group.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ConfirmationEmailComponent } from './auth/confirmation-email/confirmati
     SpinnerComponent,
     DomPlaceHolder,
     ConfirmationEmailComponent,
+    CreateGroupComponent,
   ],
   imports: [
     BrowserModule,

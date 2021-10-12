@@ -149,12 +149,15 @@
                     <button type="submit" class="btn btn-primary mt-4">
                       Create account
                     </button>
-                    <button type="button" (click)='RequestAccountConfirmationEmail(registerForm)' class="btn btn-primary mt-4">
+                    <button
+                      type="button"
+                      (click)="RequestAccountConfirmationEmail(registerForm)"
+                      class="btn btn-primary mt-4"
+                    >
                       Resend Confirmation Email
                     </button>
                   </div>
                 </div>
-
               </form>
             </div>
           </div>
@@ -166,6 +169,15 @@
     <div class="row justify-content-center">
       <div class="alert alert-danger" style="width: max-content" *ngIf="error">
         <p style="text-align: center">{{ error }}</p>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div
+        class="alert alert-success"
+        style="width: max-content"
+        *ngIf="success"
+      >
+        <p style="text-align: center">{{ success }}</p>
       </div>
     </div>
   </div>

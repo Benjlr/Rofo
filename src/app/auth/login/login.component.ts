@@ -19,14 +19,19 @@ export class LoginComponent implements OnInit {
   focus1: any;
   focus2: any;
   error: string = '';
+  success: string = '';
 
   @ViewChild(DomPlaceHolder, { static: false })
   alertHost: DomPlaceHolder;
   private closeSub: Subscription;
 
-  constructor() { }
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.route.queryParams
+      .subscribe(params => {
+        this.success = params.accountConfirmed;
+
   }
 
   onSubmit(form: NgForm) {}
