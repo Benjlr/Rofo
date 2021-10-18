@@ -97,7 +97,7 @@ export class AuthService {
 
   register(username: string, email: string, password: string) {
     return this.httpClient
-      .post<{ Errors: string }>(`${environment.apiUrl}/Register`, {
+      .post<{ errors: string }>(`${environment.apiUrl}/Register`, {
         Username: username,
         Email: email,
         Password: password,
@@ -112,7 +112,7 @@ export class AuthService {
 
   requestConfirmationEmail(email: string, password: string, callbackUrl: string) {
     return this.httpClient
-      .post<{ Errors: string }>(`${environment.apiUrl}/Register/request-email-confirmation`, {
+      .post<string>(`${environment.apiUrl}/Register/request-email-confirmation`, {
         Email: email,
         Password: password,
         CallbackURL: callbackUrl,

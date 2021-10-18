@@ -12,7 +12,6 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DomPlaceHolder } from './shared/domplaceholder.directive';
 import { HttpClientModule } from '@angular/common/http';
-import { ConfirmationEmailComponent } from './auth/confirmation-email/confirmation-email.component';
 import { CreateGroupComponent } from './auth/create-group/create-group.component';
 
 @NgModule({
@@ -24,7 +23,6 @@ import { CreateGroupComponent } from './auth/create-group/create-group.component
     AppHeaderComponent,
     SpinnerComponent,
     DomPlaceHolder,
-    ConfirmationEmailComponent,
     CreateGroupComponent,
   ],
   imports: [

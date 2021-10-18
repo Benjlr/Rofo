@@ -41,17 +41,17 @@ export class RegisterComponent implements OnInit {
 
     this.isLoading = true;
     this.showSpinner();
-    let registerObs: Observable<{ Errors: string }> = new Observable<{
-      Errors: string;
+    let registerObs: Observable<{ errors: string }> = new Observable<{
+      errors: string;
     }>();
 
     registerObs = this.authService.register(form.value.Username, form.value.email, form.value.password);
     registerObs.subscribe(
-      (respData: { Errors: string }) => {
+      (respData: { errors: string }) => {
         console.log(respData);
         this.isLoading = false;
-        if (respData.Errors) {
-          this.error = respData.Errors;
+        if (respData.errors) {
+          this.error = respData.errors;
         }
         else{
           this.RequestAccountConfirmationEmail(form);
@@ -70,17 +70,15 @@ export class RegisterComponent implements OnInit {
   }
 
   RequestAccountConfirmationEmail(form: NgForm){
-    let acoountConfirmObs : Observable<{ Errors: string }> = new Observable<{
-      Errors: string;
-    }>();
+    let acoountConfirmObs : Observable< string > = new Observable<string>();
     acoountConfirmObs = this.authService.requestConfirmationEmail(form.value.email, form.value.password, 'login');
     acoountConfirmObs.subscribe(
-      (respData: { Errors: string }) => {
+      (respData: string ) => {
         console.log(respData);
         this.isLoading = false;
         this.alertHost.viewcontainerRef.clear();
-        if (respData.Errors) {
-          this.error = respData.Errors;
+        if (respData) {
+          this.error = respData;
         }
         else{
           this.success = 'Email sent successfully'

@@ -7,7 +7,7 @@ import {
 import { Subscription } from 'rxjs';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -30,9 +30,13 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams
       .subscribe(params => {
-        this.success = params.accountConfirmed;
+        this.success = params.accountConfirmed
+        }
+, null)}
+
+  onSubmit(form: NgForm) {
 
   }
-
-  onSubmit(form: NgForm) {}
 }
+
+
