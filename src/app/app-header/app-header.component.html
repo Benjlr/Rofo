@@ -38,7 +38,7 @@
           </div>
         </div>
       </div>
-      <ul class="navbar-nav ml-lg-auto">
+      <ul class="navbar-nav ml-lg-auto" *ngIf='userAuthenticated'>
         <li class="nav-item">
           <a class="nav-link" href="javascript:void(0)"
             >Discover
@@ -69,6 +69,17 @@
               >Something else here</a
             >
           </div>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-lg-auto" *ngIf='!userAuthenticated'>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['register']" href="#"
+            >Register
+            <span class="sr-only">(current)</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['login']" href="#">Sign In</a>
         </li>
       </ul>
     </div>

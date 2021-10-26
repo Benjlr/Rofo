@@ -112,7 +112,7 @@ export class AuthService {
 
   requestConfirmationEmail(email: string, password: string, callbackUrl: string) {
     return this.httpClient
-      .post<string>(`${environment.apiUrl}/Register/request-email-confirmation`, {
+      .post<{ errors: string }>(`${environment.apiUrl}/Register/request-email-confirmation`, {
         Email: email,
         Password: password,
         CallbackURL: callbackUrl,

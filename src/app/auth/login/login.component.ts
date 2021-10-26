@@ -17,7 +17,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class LoginComponent implements OnInit {
   focus: any;
   focus1: any;
-  focus2: any;
   error: string = '';
   success: string = '';
 
