@@ -12,7 +12,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DomPlaceHolder } from './shared/domplaceholder.directive';
 import { HttpClientModule } from '@angular/common/http';
-import { CreateGroupComponent } from './auth/create-group/create-group.component';
+import { CreateGroupComponent } from './groups/create-group/create-group.component';
 
 @NgModule({
   declarations: [

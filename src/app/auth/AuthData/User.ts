@@ -8,7 +8,7 @@ export class User {
     private _jwt: string
   ) {}
 
-  public static FromResponse(inputData: AuthResponse){
+  public static FromResponse(inputData: AuthResponse) : User{
     return new User(inputData.id, inputData.username, inputData.email, inputData.jwtToken);
   }
 

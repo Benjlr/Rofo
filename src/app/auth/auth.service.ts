@@ -13,7 +13,7 @@ import { AuthResponse } from './AuthData/AuthenticateResponse';
 export class AuthService {
   private userCache: CachedUserData[] = JSON.parse(
     localStorage.getItem('Rofo-Users')
-  );
+  ) ?? [];
 
   private userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
   public user: Observable<User> = this.userSubject.asObservable();
@@ -51,9 +51,11 @@ export class AuthService {
       )
       .pipe(
         map((resp) => {
-          if (resp.errors === null) {
+          if (!resp.errors) {
             let myUser = User.FromResponse(resp);
+
             this.userSubject.next(myUser);
+
             let newUser: CachedUserData = {
               id: myUser.id,
               username: myUser.username,
@@ -64,7 +66,7 @@ export class AuthService {
               (x: CachedUserData) =>
                 x.email === myUser.email && x.id === myUser.id
             );
-            if (user !== undefined) {
+            if (user) {
               user.refreshTokens.push(resp.refreshToken);
             } else {
               this.userCache.push(newUser);
@@ -92,12 +94,12 @@ export class AuthService {
     this.stopRefreshTokenTimer();
     localStorage.clear();
     this.userSubject.next(null);
-    this.router.navigate(['/authenticate']);
+    this.router.navigate(['/login']);
   }
 
   register(username: string, email: string, password: string) {
     return this.httpClient
-      .post<{ errors: string }>(`${environment.apiUrl}/Register`, {
+      .post<{ errors: string }>(`${environment.apiUrl}/register`, {
         Username: username,
         Email: email,
         Password: password,
@@ -131,17 +133,17 @@ export class AuthService {
       })
       .pipe(
         map((resp: RefreshTokenResponse) => {
-          if (resp.errors === null) {
+          if (resp.Errors === null) {
             this.userSubject.next(
               new User(
                 this.CurrentUser.id,
                 this.CurrentUser.username,
-                resp.email,
-                resp.jwtToken
+                resp.Email,
+                resp.JwtToken
               )
             );
-            let activeUser = this.userCache.find((x) => x.email === resp.email);
-            activeUser.refreshTokens.push(resp.refreshToken);
+            let activeUser = this.userCache.find((x) => x.email === resp.Email);
+            activeUser.refreshTokens.push(resp.RefreshToken);
             localStorage.setItem('Rofo-Users', JSON.stringify(this.userCache));
             this.startRefreshTokenTimer();
             if (redirectToHome) {
@@ -150,7 +152,7 @@ export class AuthService {
           } else {
             this.stopRefreshTokenTimer();
             this.userSubject.next(null);
-            this.router.navigate(['/authenticate']);
+            this.router.navigate(['/login']);
           }
 
           return resp;

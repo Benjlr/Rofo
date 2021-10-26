@@ -3,8 +3,6 @@ export interface AuthResponse {
   username:string,
   email: string;
   jwtToken: string;
-  jwtExpiry: Date;
   refreshToken: string;
-  refreshExpiry: Date;
   errors: string;
 }

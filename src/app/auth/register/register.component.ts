@@ -24,7 +24,7 @@ export class RegisterComponent implements OnInit {
   success: string = '';
   isLoading = false;
   @ViewChild(DomPlaceHolder, { static: false })
-  alertHost!: DomPlaceHolder;
+  alertHost: DomPlaceHolder;
 
   constructor(
     private authService: AuthService,
