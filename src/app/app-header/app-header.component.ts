@@ -11,14 +11,14 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   private currentUserSub: Subscription = new Subscription();
   public collapse = false;
   public userName: string = '';
-  userAuthenticated = false;
+  public userAuthenticated = false;
 
   constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
     this.currentUserSub = this.authService.user.subscribe((user) => {
       if(user){
-        this.userAuthenticated == true;
+        this.userAuthenticated = true;
         this.userName = this.authService.CurrentUser.username;
       }
     });
@@ -30,7 +30,7 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
 
   logout() {
     this.authService.logout();
-    this.userAuthenticated == false;
+    this.userAuthenticated = false;
     this.userName = '';
   }
 }

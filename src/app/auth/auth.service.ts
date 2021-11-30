@@ -94,7 +94,7 @@ export class AuthService {
     this.stopRefreshTokenTimer();
     localStorage.clear();
     this.userSubject.next(null);
-    this.router.navigate(['/login']);
+    this.router.navigate(['login']);
   }
 
   register(username: string, email: string, password: string) {
