@@ -1,5 +1,7 @@
+import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { AuthInterceptorService } from "./auth/auth-interceptor.service";
 import { LoginComponent } from "./auth/login/login.component";
 import { RegisterComponent } from "./auth/register/register.component";
 import { CreateGroupComponent } from "./groups/create-group/create-group.component";
@@ -16,5 +18,14 @@ const appRoutes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(appRoutes)],
   exports: [RouterModule],
+  providers: [
+
+      {
+        provide: HTTP_INTERCEPTORS,
+        useClass: AuthInterceptorService,
+        multi: true,
+      },
+
+  ]
 })
 export class AppRoutingModule {}

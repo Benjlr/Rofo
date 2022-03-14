@@ -17,7 +17,7 @@ export class GroupService {
     .post<string>(
       `${environment.apiUrl}/Group/create-group`,
       {
-        Name: groupName,
+        GroupName: groupName,
         Description: description,
       },
       { withCredentials: false }

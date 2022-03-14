@@ -11,7 +11,7 @@ import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { DomPlaceHolder } from './shared/domplaceholder.directive';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CreateGroupComponent } from './groups/create-group/create-group.component';
 import { ViewGroupsComponent } from './groups/view-groups/view-groups.component';
 import { ProfileComponent } from './profile/profile.component';

@@ -1,6 +1,11 @@
+import { HttpEvent } from "@angular/common/http";
+import { MonoTypeOperatorFunction, OperatorFunction } from "rxjs";
 import { AuthResponse } from "./AuthenticateResponse";
 
 export class User {
+  pipe(arg0: MonoTypeOperatorFunction<unknown>, arg1: OperatorFunction<unknown, HttpEvent<any>>) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     public id: string,
     public username: string,
