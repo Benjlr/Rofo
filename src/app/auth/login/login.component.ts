@@ -57,6 +57,7 @@ export class LoginComponent implements OnInit {
           this.error = respData.errors;
         }
         this.alertHost.viewcontainerRef.clear();
+        this.router.navigate(['/view-groups'])
       },
       (err) => {
         console.log(err.message ?? err);

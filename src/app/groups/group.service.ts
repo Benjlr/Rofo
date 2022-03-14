@@ -15,7 +15,7 @@ export class GroupService {
   CreateGroup(groupName:string, description: string){
     return this.httpClient
     .post<string>(
-      `${environment.apiUrl}/Authentication`,
+      `${environment.apiUrl}/Group/create-group`,
       {
         Name: groupName,
         Description: description,

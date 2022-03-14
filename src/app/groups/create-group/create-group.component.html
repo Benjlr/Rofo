@@ -1,1 +1,102 @@
-<p>create-group works!</p>
+<ng-template appPlaceHolder></ng-template>
+
+<main>
+  <section class="section section-shaped section-md">
+    <div class="shape shape-style-1" *ngIf="!error">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-5">
+          <div class="card bg-secondary shadow border-0">
+            <a>Create Group</a>
+            <div class="card-body px-lg-5 py-lg-1">
+
+              <form #creategroup="ngForm" (ngSubmit)="onSubmit(creategroup)">
+                <div
+                  class="form-group mb-3"
+                  [ngClass]="{ focused: focus === true }"
+                >
+                  <div class="input-group input-group-alternative">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="ni ni-email-83"></i
+                      ></span>
+                    </div>
+                    <input
+                      class="form-control"
+                      placeholder="Group Name"
+                      type="name"
+                      (focus)="focus = true"
+                      (blur)="focus = false"
+                      #name="ngModel"
+                      ngModel
+                      name="name"
+                      id="name"
+                      required
+                      name
+                    />
+                  </div>
+                </div>
+                <div
+                  class="form-group"
+                  [ngClass]="{ focused: focus1 === true }"
+                >
+                  <div class="input-group input-group-alternative">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"
+                        ><i class="ni ni-lock-circle-open"></i
+                      ></span>
+                    </div>
+                    <input
+                      class="form-control"
+                      placeholder="Group Description"
+                      type="description"
+                      id="description"
+                      ngModel
+                      name="description"
+                      required
+                      minlength="6"
+                      #description="ngModel"
+                      (focus)="focus1 = true"
+                      (blur)="focus1 = false"
+                    />
+                  </div>
+                </div>
+                <div class="text-center">
+                  <button type="submit" class="btn btn-primary my-4">
+                    LETS GO
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="alert alert-danger" style="width: max-content" *ngIf="error">
+        <p style="text-align: center">{{ error }}</p>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div
+        class="alert alert-success"
+        style="width: max-content"
+        *ngIf="success"
+      >
+        <p style="text-align: center">{{ success }}</p>
+      </div>
+    </div>
+  </div>
+</main>

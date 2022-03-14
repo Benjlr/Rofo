@@ -1,6 +1,6 @@
 export interface RefreshTokenResponse {
-  Email: string;
+  email: string;
   JwtToken: string;
   RefreshToken: string;
-  Errors: string;
+  errors: string;
 }

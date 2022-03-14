@@ -51,7 +51,7 @@ export class AuthService {
       )
       .pipe(
         map((resp) => {
-          if (!resp.errors) {
+          if (resp.errors == null) {
             let myUser = User.FromResponse(resp);
 
             this.userSubject.next(myUser);
@@ -64,10 +64,11 @@ export class AuthService {
             };
             let user = this.userCache.find(
               (x: CachedUserData) =>
-                x.email === myUser.email && x.id === myUser.id
+                x.email === myUser.email
             );
-            if (user) {
-              user.refreshTokens.push(resp.refreshToken);
+
+            if (user != null) {
+              (user as CachedUserData).refreshTokens.push(resp.refreshToken);
             } else {
               this.userCache.push(newUser);
             }
@@ -133,17 +134,17 @@ export class AuthService {
       })
       .pipe(
         map((resp: RefreshTokenResponse) => {
-          if (resp.Errors === null) {
+          if (!resp.errors) {
             this.userSubject.next(
               new User(
                 this.CurrentUser.id,
                 this.CurrentUser.username,
-                resp.Email,
+                resp.email,
                 resp.JwtToken
               )
             );
-            let activeUser = this.userCache.find((x) => x.email === resp.Email);
-            activeUser.refreshTokens.push(resp.RefreshToken);
+            let activeUser = this.userCache.find((x) => x.email === resp.email);
+            (activeUser as CachedUserData).refreshTokens.push(resp.RefreshToken);
             localStorage.setItem('Rofo-Users', JSON.stringify(this.userCache));
             this.startRefreshTokenTimer();
             if (redirectToHome) {
