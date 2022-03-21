@@ -143,6 +143,8 @@ export class AuthService {
                 resp.JwtToken
               )
             );
+            console.log(this.userSubject.value.JwtToken)
+            console.log(this.userSubject.value.JwtExpiry)
             let activeUser = this.userCache.find((x) => x.email === resp.email);
             (activeUser as CachedUserData).refreshTokens.push(resp.RefreshToken);
             localStorage.setItem('Rofo-Users', JSON.stringify(this.userCache));
@@ -165,6 +167,8 @@ export class AuthService {
 
   private startRefreshTokenTimer() {
     // parse json object from base64 encoded jwt token
+    console.log(this.CurrentUser?.JwtToken?.split('.')[1] ?? '')
+
     const jwtToken = JSON.parse(
       atob(this.CurrentUser?.JwtToken?.split('.')[1] ?? '')
     );

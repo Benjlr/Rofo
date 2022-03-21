@@ -20,7 +20,7 @@ export class GroupService {
         GroupName: groupName,
         Description: description,
       },
-      { withCredentials: false }
+      { withCredentials: true }
     );
 
   }
