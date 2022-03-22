@@ -52,7 +52,7 @@ export class AuthService {
       .pipe(
         map((resp) => {
           if (resp.errors == null) {
-            let myUser = User.FromResponse(resp);
+            let myUser = User.FromAuthResponse(resp);
 
             this.userSubject.next(myUser);
 
@@ -135,23 +135,21 @@ export class AuthService {
       .pipe(
         map((resp: RefreshTokenResponse) => {
           if (!resp.errors) {
-            this.userSubject.next(
-              new User(
-                this.CurrentUser.id,
-                this.CurrentUser.username,
-                resp.email,
-                resp.JwtToken
-              )
-            );
-            console.log(this.userSubject.value.JwtToken)
-            console.log(this.userSubject.value.JwtExpiry)
+
+            let myUser = User.FromRefreshResponse(
+              this.CurrentUser.id,
+              this.CurrentUser.username,
+              resp);
+            this.userSubject.next(myUser);
+
             let activeUser = this.userCache.find((x) => x.email === resp.email);
-            (activeUser as CachedUserData).refreshTokens.push(resp.RefreshToken);
+            (activeUser as CachedUserData).refreshTokens.push(resp.refreshToken);
             localStorage.setItem('Rofo-Users', JSON.stringify(this.userCache));
             this.startRefreshTokenTimer();
             if (redirectToHome) {
               this.router.navigate(['']);
             }
+            console.log("REFRESHED")
           } else {
             this.stopRefreshTokenTimer();
             this.userSubject.next(null);

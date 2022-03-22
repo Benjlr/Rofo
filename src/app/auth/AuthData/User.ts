@@ -1,6 +1,7 @@
 import { HttpEvent } from "@angular/common/http";
 import { MonoTypeOperatorFunction, OperatorFunction } from "rxjs";
 import { AuthResponse } from "./AuthenticateResponse";
+import { RefreshTokenResponse } from "./RefreshTokenResponse";
 
 export class User {
   pipe(arg0: MonoTypeOperatorFunction<unknown>, arg1: OperatorFunction<unknown, HttpEvent<any>>) {
@@ -13,8 +14,12 @@ export class User {
     private _jwt: string
   ) {}
 
-  public static FromResponse(inputData: AuthResponse) : User{
+  public static FromAuthResponse(inputData: AuthResponse) : User{
     return new User(inputData.id, inputData.username, inputData.email, inputData.jwtToken);
+  }
+
+  public static FromRefreshResponse(currentUserId: string, currentUserName:string, refreshResponse : RefreshTokenResponse) : User{
+    return new User(currentUserId, currentUserName, refreshResponse.email, refreshResponse.jwtToken);
   }
 
   get JwtToken(){
