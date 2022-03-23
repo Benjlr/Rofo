@@ -21,7 +21,7 @@ export class AuthInterceptorService implements HttpInterceptor {
           return next.handle(req);
         }
         const modifiedReq = req.clone({
-          params: new HttpParams().set('auth', user.JwtToken)
+          params: new HttpParams().set('bearer ', user.JwtToken)
         });
         return next.handle(modifiedReq);
       })

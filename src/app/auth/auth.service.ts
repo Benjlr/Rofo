@@ -11,15 +11,20 @@ import { AuthResponse } from './AuthData/AuthenticateResponse';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+
   private userCache: CachedUserData[] = JSON.parse(
     localStorage.getItem('Rofo-Users')
   ) ?? [];
 
+
   private userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
+
   public user: Observable<User> = this.userSubject.asObservable();
+
   public get CurrentUser(): User {
     return this.userSubject.value;
   }
+
   public get CurrentUserRefreshToken(): string {
     let user = this.userCache.find(
       (x: CachedUserData) => x.email === this.CurrentUser?.email
@@ -38,6 +43,33 @@ export class AuthService {
       ).subscribe();
     }
   }
+
+  // autoLogin() {
+  //   const userData: {
+  //     email: string;
+  //     id: string;
+  //     _token: string;
+  //     _tokenExpirationDate: string;
+  //   } = JSON.parse(localStorage.getItem('userData'));
+  //   if (!userData) {
+  //     return;
+  //   }
+
+  //   const loadedUser = new User(
+  //     userData.email,
+  //     userData.id,
+  //     userData._jwt,
+  //     new Date(userData._tokenExpirationDate)
+  //   );
+
+  //   if (loadedUser.token) {
+  //     this.user.next(loadedUser);
+  //     const expirationDuration =
+  //       new Date(userData._tokenExpirationDate).getTime() -
+  //       new Date().getTime();
+  //     this.autoLogout(expirationDuration);
+  //   }
+  // }
 
   login(email: string, password: string) {
     return this.httpClient

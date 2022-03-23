@@ -51,11 +51,11 @@
             aria-labelledby="navbar-primary_dropdown_1"
             ngbDropdownMenu
           >
-            <a class="dropdown-item" [routerLink]="['view-groups']"
+            <a class="dropdown-item" routerLink='groups/view'
               >My Groups</a
             >
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" [routerLink]="['create-group']"
+            <a class="dropdown-item" routerLink='groups/create'
               >Create a new Group</a
             >
           </div>
@@ -97,13 +97,12 @@
       </ul>
       <ul class="navbar-nav ml-lg-auto" *ngIf='!userAuthenticated'>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['register']" href="#"
-            >Register
+          <a class="nav-link" routerLink='auth/register' >Register
             <span class="sr-only">(current)</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" [routerLink]="['login']" href="#">Sign In</a>
+          <a class="nav-link" routerLink='auth/login' >Sign In</a>
         </li>
       </ul>
       <ul class="navbar-nav ml-lg-auto" *ngIf='userAuthenticated'>
