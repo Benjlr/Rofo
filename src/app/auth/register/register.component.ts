@@ -71,7 +71,7 @@ export class RegisterComponent implements OnInit {
 
   RequestAccountConfirmationEmail(form: NgForm){
     let acoountConfirmObs : Observable< { errors: string } > = new Observable<{ errors: string }>();
-    acoountConfirmObs = this.authService.requestConfirmationEmail(form.value.email, form.value.password, 'login');
+    acoountConfirmObs = this.authService.requestConfirmationEmail(form.value.email, form.value.password, 'auth/login');
     acoountConfirmObs.subscribe(
       (respData: { errors: string } ) => {
         console.log(respData.errors);

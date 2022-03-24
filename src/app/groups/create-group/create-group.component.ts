@@ -4,6 +4,7 @@ import { GroupService } from '../group.service';
 import { Observable, Subscription } from 'rxjs';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
+import { ErrorResponse } from 'src/app/shared/errorResponse';
 
 @Component({
   selector: 'app-create-group',
@@ -13,12 +14,12 @@ import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 export class CreateGroupComponent implements OnInit {
   focus: any;
   focus1: any;
-  public success:boolean = false;
   isLoading = false;
   @ViewChild(DomPlaceHolder, { static: false })
   alertHost: DomPlaceHolder;
   private closeSub: Subscription;
-  error: string = '';
+  errorMessage: string = '';
+  successMessage:string ='';
 
   constructor(
     private groupService: GroupService,
@@ -37,20 +38,23 @@ export class CreateGroupComponent implements OnInit {
     this.isLoading = true;
     this.showSpinner();
 
-    let groupObs: Observable<string> = new Observable<string>();
+    let groupObs: Observable<ErrorResponse> = new Observable<ErrorResponse>();
     groupObs = this.groupService.CreateGroup(form.value.name, form.value.description);
     groupObs.subscribe(
-      (respData: string) => {
+      ( respData: ErrorResponse) => {
         console.log(respData);
         this.isLoading = false;
-        if (respData) {
-          this.error = respData;
+        if (respData.errors) {
+          this.errorMessage = respData.errors;
+        }
+        else{
+          this.successMessage = form.value.name + ' created!'
         }
         this.alertHost.viewcontainerRef.clear();
       },
       (err) => {
         console.log(err.message ?? err);
-        this.error = err.message ?? err;
+        this.errorMessage = err.message ?? err;
         this.isLoading = false;
         this.alertHost.viewcontainerRef.clear();
       }

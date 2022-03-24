@@ -2,7 +2,7 @@
 
 <main>
   <section class="section section-shaped section-md">
-    <div class="shape shape-style-1" *ngIf="!error">
+    <div class="shape shape-style-1" *ngIf="errorMessage">
       <span></span>
       <span></span>
       <span></span>
@@ -84,17 +84,17 @@
   </section>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="alert alert-danger" style="width: max-content" *ngIf="error">
-        <p style="text-align: center">{{ error }}</p>
+      <div class="alert alert-danger" style="width: max-content" *ngIf="errorMessage">
+        <p style="text-align: center">{{ errorMessage }}</p>
       </div>
     </div>
     <div class="row justify-content-center">
       <div
         class="alert alert-success"
         style="width: max-content"
-        *ngIf="success"
+        *ngIf="successMessage"
       >
-        <p style="text-align: center">{{ success }}</p>
+        <p style="text-align: center">{{ successMessage }}</p>
       </div>
     </div>
   </div>

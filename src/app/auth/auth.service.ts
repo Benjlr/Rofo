@@ -185,7 +185,7 @@ export class AuthService {
           } else {
             this.stopRefreshTokenTimer();
             this.userSubject.next(null);
-            this.router.navigate(['/login']);
+            this.router.navigate(['auth/login']);
           }
 
           return resp;
