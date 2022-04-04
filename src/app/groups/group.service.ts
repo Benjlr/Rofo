@@ -12,7 +12,7 @@ export class GroupService {
     private authService:AuthService) {}
 
   GetAllGroups(){
-
+return this.httpClient.get<Group
   }
 
   CreateGroup(groupName:string, description: string){
