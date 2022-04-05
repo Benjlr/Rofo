@@ -1,1 +1,11 @@
+<ng-template appPlaceHolder></ng-template>
+
+
 <p>view-groups works!</p>
+<div class="row">
+  <div class="col-xs-12">
+    <div *ngFor="let recipeEl of myGroups; let i = index" >
+      <a>{{recipeEl.name}} - {{recipeEl.description}}</a>
+    </div>
+  </div>
+</div>

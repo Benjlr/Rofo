@@ -11,11 +11,8 @@ import { AuthResponse } from './AuthData/AuthenticateResponse';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-
-  private userCache: CachedUserData[] = JSON.parse(
-    localStorage.getItem('Rofo-Users')
-  ) ?? [];
-
+  private userCache: CachedUserData[] =
+    JSON.parse(localStorage.getItem('Rofo-Users')) ?? [];
 
   private userSubject: BehaviorSubject<User> = new BehaviorSubject<User>(null);
 
@@ -95,8 +92,7 @@ export class AuthService {
               refreshTokens: [resp.refreshToken],
             };
             let user = this.userCache.find(
-              (x: CachedUserData) =>
-                x.email === myUser.email
+              (x: CachedUserData) => x.email === myUser.email
             );
 
             if (user != null) {
@@ -127,7 +123,7 @@ export class AuthService {
     this.stopRefreshTokenTimer();
     localStorage.clear();
     this.userSubject.next(null);
-    this.router.navigate(['login']);
+    this.router.navigate(['auth/login']);
   }
 
   register(username: string, email: string, password: string) {
@@ -139,19 +135,25 @@ export class AuthService {
       })
       .pipe(
         map((resp) => {
-
           return resp;
         })
       );
   }
 
-  requestConfirmationEmail(email: string, password: string, callbackUrl: string) {
+  requestConfirmationEmail(
+    email: string,
+    password: string,
+    callbackUrl: string
+  ) {
     return this.httpClient
-      .post<{ errors: string }>(`${environment.apiUrl}/Register/request-email-confirmation`, {
-        Email: email,
-        Password: password,
-        CallbackURL: callbackUrl,
-      })
+      .post<{ errors: string }>(
+        `${environment.apiUrl}/Register/request-email-confirmation`,
+        {
+          Email: email,
+          Password: password,
+          CallbackURL: callbackUrl,
+        }
+      )
       .pipe(
         map((resp) => {
           return resp;
@@ -167,21 +169,25 @@ export class AuthService {
       .pipe(
         map((resp: RefreshTokenResponse) => {
           if (!resp.errors) {
+            let lastUser = this.userCache[this.userCache.length - 1];
 
             let myUser = User.FromRefreshResponse(
-              this.CurrentUser.id,
-              this.CurrentUser.username,
-              resp);
+              lastUser.id,
+              lastUser.username,
+              resp
+            );
             this.userSubject.next(myUser);
 
             let activeUser = this.userCache.find((x) => x.email === resp.email);
-            (activeUser as CachedUserData).refreshTokens.push(resp.refreshToken);
+            (activeUser as CachedUserData).refreshTokens.push(
+              resp.refreshToken
+            );
             localStorage.setItem('Rofo-Users', JSON.stringify(this.userCache));
             this.startRefreshTokenTimer();
             if (redirectToHome) {
               this.router.navigate(['']);
             }
-            console.log("REFRESHED")
+            console.log('REFRESHED');
           } else {
             this.stopRefreshTokenTimer();
             this.userSubject.next(null);
@@ -197,7 +203,7 @@ export class AuthService {
 
   private startRefreshTokenTimer() {
     // parse json object from base64 encoded jwt token
-    console.log(this.CurrentUser?.JwtToken?.split('.')[1] ?? '')
+    console.log(this.CurrentUser?.JwtToken?.split('.')[1] ?? '');
 
     const jwtToken = JSON.parse(
       atob(this.CurrentUser?.JwtToken?.split('.')[1] ?? '')
