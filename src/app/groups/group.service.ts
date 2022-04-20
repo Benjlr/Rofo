@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { ErrorResponse } from '../shared/errorResponse';
+import { Group } from './group-models/Group';
 import { GroupResponse } from './group-models/GroupResponse';
 
 @Injectable({
@@ -33,6 +34,25 @@ export class GroupService {
         Email: this.authService.CurrentUser.email,
         GroupName: groupName,
         Description: description,
+      },
+      {
+        withCredentials: true,
+        headers: {
+          Authorization: 'Bearer ' + this.authService.CurrentUser.JwtToken,
+        },
+      }
+    );
+  }
+
+  InviteToGroup(email: string, message:string, theGroup: Group) {
+    return this.httpClient.post<ErrorResponse>(
+      `${environment.apiUrl}/group/invite`,
+      {
+        NewMemberEmail: email,
+        GroupId: theGroup.id,
+        Message: message,
+        AccessLevel: 'read_write',
+        RegisterEndpoint: 'http://localhost:4200/auth/register'
       },
       {
         withCredentials: true,

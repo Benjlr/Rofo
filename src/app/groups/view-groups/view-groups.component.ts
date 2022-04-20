@@ -1,8 +1,10 @@
 import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 import { Group } from '../group-models/Group';
 import { GroupService } from '../group.service';
+import { InviteModalComponent } from './invite-modal/invite-modal.component';
 
 @Component({
   selector: 'app-view-groups',
@@ -10,7 +12,9 @@ import { GroupService } from '../group.service';
   styleUrls: ['./view-groups.component.css'],
 })
 export class ViewGroupsComponent implements OnInit {
-  constructor(private groups: GroupService,
+  constructor(
+    private groups: GroupService,
+    private modalService: NgbModal,
     private cfr: ComponentFactoryResolver) {}
 
   @ViewChild(DomPlaceHolder, { static: false })
@@ -50,5 +54,24 @@ export class ViewGroupsComponent implements OnInit {
     const alertCompFact = this.cfr.resolveComponentFactory(SpinnerComponent);
     const hostViewRef = this.alertHost.viewcontainerRef;
     const componentRef = hostViewRef.createComponent(alertCompFact);
+  }
+
+  openModal(group: Group) {
+    const modalRef = this.modalService.open(InviteModalComponent,
+      {
+        centered: true,
+        windowClass: 'myCustomModalClass',
+        size: 'md'
+        // keyboard: false,
+        // backdrop: 'static'
+      });
+
+    let data = group;
+
+    modalRef.componentInstance.fromParent = data;
+    modalRef.result.then((result) => {
+      console.log(result);
+    }, (reason) => {
+    });
   }
 }

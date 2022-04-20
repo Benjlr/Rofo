@@ -6,11 +6,13 @@ import { SharedModule } from "../shared/shared.module";
 import { CreateGroupComponent } from "./create-group/create-group.component";
 import { GroupsRoutingModule } from "./groups-routing.module";
 import { ViewGroupsComponent } from "./view-groups/view-groups.component";
+import { InviteModalComponent } from './view-groups/invite-modal/invite-modal.component';
 
 @NgModule({
   declarations: [
     CreateGroupComponent,
-    ViewGroupsComponent
+    ViewGroupsComponent,
+    InviteModalComponent
   ],
   imports:[
     RouterModule,
