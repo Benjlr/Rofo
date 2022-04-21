@@ -1,4 +1,5 @@
 import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
@@ -15,6 +16,7 @@ export class ViewGroupsComponent implements OnInit {
   constructor(
     private groups: GroupService,
     private modalService: NgbModal,
+    private router: Router,
     private cfr: ComponentFactoryResolver) {}
 
   @ViewChild(DomPlaceHolder, { static: false })
@@ -54,6 +56,10 @@ export class ViewGroupsComponent implements OnInit {
     const alertCompFact = this.cfr.resolveComponentFactory(SpinnerComponent);
     const hostViewRef = this.alertHost.viewcontainerRef;
     const componentRef = hostViewRef.createComponent(alertCompFact);
+  }
+
+  goToPhotos(group:Group){
+    this.router.navigate(["../photos/view"]);
   }
 
   openModal(group: Group) {
