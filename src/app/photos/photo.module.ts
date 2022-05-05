@@ -5,9 +5,10 @@ import { RouterModule } from '@angular/router';
 import { PhotosRoutingModule } from './photos-routing.module';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
+import { AddPhotoComponent } from './add-photo/add-photo.component';
 
 @NgModule({
-  declarations: [ViewPhotosComponent],
+  declarations: [ViewPhotosComponent, AddPhotoComponent],
   imports: [
     CommonModule,
     RouterModule,

@@ -1,0 +1,88 @@
+<ng-template appPlaceHolder></ng-template>
+
+<main>
+  <section class="section section-shaped section-md" >
+    <div class="shape shape-style-1 rounded-lg"  *ngIf="!error">
+      <span></span>
+      <span></span>
+      <span></span>
+
+      <span></span>
+    </div>
+    <div class="text-muted text-center">
+      <a style="font-size: large">Upload a rofo!</a>
+    </div>
+    <div class="container">
+      <div class="row mt-3"></div>
+      <img id="prev" [src]="imageSrc" alt="preview"
+      loading="lazy"
+      class="card-img-top shadow"/>
+      <div class="row mt-3"></div>
+
+      <form #uploadPhoto="ngForm" (ngSubmit)="onSubmit(uploadPhoto)">
+        <div class="form-group">
+          <div class="custom-file">
+            <input
+              type="file"
+              class="form-control"
+              id="customFileInput"
+              aria-describedby="customFileInput"
+              (focus)="focus = true"
+              (blur)="focus = false"
+            name="customFileInput"
+            accept="image/*"
+            #customFileInput="ngModel"
+            ngModel
+            (change)='UpdateFile($event.target.files)'
+            />
+            <label class="custom-file-label" for="customFileInput"
+              >{{myFile?.name ?? "Select file"}}</label
+            >
+          </div>
+
+          <div class="row mt-3"></div>
+
+          <textarea
+            class="form-control"
+            id="photoDesc"
+            type="photoDesc"
+            name="photoDesc"
+            ngModel
+            placeholder="Write a description."
+            (focus)="focus1 = true"
+            (blur)="focus1 = false"
+            #photoDesc="ngModel"
+            rows="6"
+          ></textarea>
+          <div class="row mt-3"></div>
+
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="submit" id="customFileInput">
+              Upload
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div
+        class="alert alert-success"
+        style="width: max-content"
+        *ngIf="success"
+      >
+        <p style="text-align: center">{{ success }}</p>
+      </div>
+      <div class="row justify-content-center">
+        <div
+          class="alert alert-danger"
+          style="width: max-content"
+          *ngIf="error"
+        >
+          <p style="text-align: center">{{ error }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

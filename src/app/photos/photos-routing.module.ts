@@ -6,7 +6,7 @@ import { ViewPhotosComponent } from "./view-photos/view-photos.component";
 const routes =[
   {
     path:"",
-    canActivate: [AuthGuard],
+    //canActivate: [AuthGuard],
     children:[
       {path:"view", component: ViewPhotosComponent},
     ]

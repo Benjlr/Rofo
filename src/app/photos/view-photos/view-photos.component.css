@@ -20,3 +20,29 @@ img {
   align-items:center;
   aspect-ratio: attr(width) / attr(height);
 }
+
+body{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:18px;
+	background-color:#CCC;
+}
+
+.float{
+	position:fixed;
+	width:100px;
+	height:100px;
+	bottom:40px;
+	right:40px;
+	background-color:#0C9;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 4px 4px 6px #999;
+}
+
+.my-float{
+
+	margin-top:40px;
+	margin-left:3px;
+
+}

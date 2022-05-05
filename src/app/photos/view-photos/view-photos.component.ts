@@ -1,5 +1,7 @@
 
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { AddPhotoComponent } from '../add-photo/add-photo.component';
 import { PhotoService } from '../photo.service';
 
 @Component({
@@ -9,7 +11,11 @@ import { PhotoService } from '../photo.service';
 })
 export class ViewPhotosComponent implements OnInit {
 
-  constructor(private photoService : PhotoService ) { }
+  drafting:boolean = false;
+  constructor(
+    private photoService : PhotoService,
+    private modalService: NgbModal
+    ) { }
 
   ngOnInit(): void {
   }
@@ -22,4 +28,26 @@ export class ViewPhotosComponent implements OnInit {
     return this.photoService.GetComments();
   }
 
+  DraftComment(photo:string){
+    this.drafting= true;
+  }
+
+  openModal() {
+    const modalRef = this.modalService.open(AddPhotoComponent,
+      {
+        centered: true,
+        windowClass: 'myCustomModalClass',
+        size: 'md'
+        // keyboard: false,
+        // backdrop: 'static'
+      });
+
+    // let data = group;
+    // modalRef.componentInstance.fromParent = data;
+
+    modalRef.result.then((result) => {
+      console.log(result);
+    }, (reason) => {
+    });
+  }
 }

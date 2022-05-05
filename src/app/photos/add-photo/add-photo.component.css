@@ -1,0 +1,8 @@
+img {
+  width: 100%;
+  height: auto;
+  align-items:center;
+  aspect-ratio: attr(width) / attr(height);
+  border-width: 3px;
+  border-radius: 1rem;
+}
