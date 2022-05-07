@@ -57,8 +57,10 @@ export class InviteModalComponent implements OnInit {
         if (respData.errors) {
           this.error = respData.errors;
         }
-        this.alertHost.viewcontainerRef.clear();
-        this.success = 'Invited!'
+        else{
+          this.alertHost.viewcontainerRef.clear();
+          this.success = 'Invited!'
+        }
       },
       (err) => {
         console.log(err.message ?? err);

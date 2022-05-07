@@ -14,7 +14,7 @@ import { InviteModalComponent } from './invite-modal/invite-modal.component';
 })
 export class ViewGroupsComponent implements OnInit {
   constructor(
-    private groups: GroupService,
+    private groupService: GroupService,
     private modalService: NgbModal,
     private router: Router,
     private cfr: ComponentFactoryResolver) {}
@@ -31,7 +31,7 @@ export class ViewGroupsComponent implements OnInit {
     this.isLoading = true;
     // this.showSpinner();
 
-    this.groups.GetAllGroups().subscribe(
+    this.groupService.GetAllGroups().subscribe(
       (x) => {
         this.isLoading = false;
 
@@ -59,6 +59,7 @@ export class ViewGroupsComponent implements OnInit {
   }
 
   goToPhotos(group:Group){
+    this.groupService.UpdateCurrentGroup(group);
     this.router.navigate(["../photos/view"]);
   }
 

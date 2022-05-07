@@ -7,7 +7,9 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
+import { GroupedObservable, interval, Observable, timer } from 'rxjs';
+import { Group } from 'src/app/groups/group-models/Group';
+import { GroupService } from 'src/app/groups/group.service';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { ErrorResponse } from 'src/app/shared/errorResponse';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
@@ -32,6 +34,7 @@ export class AddPhotoComponent implements OnInit {
 
   constructor(
     private photoService: PhotoService,
+    private groupService: GroupService,
     public activeModal: NgbActiveModal,
     private cfr: ComponentFactoryResolver
   ) {}
@@ -46,16 +49,22 @@ export class AddPhotoComponent implements OnInit {
     this.showSpinner();
 
     let signInObs: Observable<ErrorResponse> = new Observable<ErrorResponse>();
-    signInObs = this.photoService.UploadPhoto(this.imageSrc);
+    signInObs = this.photoService.UploadPhoto({
+      Photo: this.imageSrc,
+      Description: form.value.photoDesc,
+      GroupId: this.groupService.ActiveGroup.securityStamp,
+    });
     signInObs.subscribe(
       (respData: ErrorResponse) => {
         console.log(respData);
         this.isLoading = false;
         if (respData.errors) {
           this.error = respData.errors;
+        } else {
+          this.alertHost.viewcontainerRef.clear();
+          this.success = 'Uploaded!';
+          interval(1800).subscribe(x=> this.photoService.GetPhotos());
         }
-        this.alertHost.viewcontainerRef.clear();
-        this.success = 'Uploaded!';
       },
       (err) => {
         console.log(err.message ?? err);
@@ -73,14 +82,14 @@ export class AddPhotoComponent implements OnInit {
   }
 
   myFile: File;
-  imageSrc: string|ArrayBuffer;
+  imageSrc: ArrayBuffer;
 
-  UpdateFile(e: File[]) {
-    this.myFile = e[0];
-
-    const reader = new FileReader();
-    reader.onload = e => this.imageSrc = reader.result;
-
-    reader.readAsDataURL(this.myFile);
+  UpdateFile(files: File[]) {
+    if (files && files.length > 0) {
+      this.myFile = files[0];
+      var reader = new FileReader();
+      reader.onload = (fr) => (this.imageSrc = reader.result as ArrayBuffer);
+      reader.readAsDataURL(this.myFile);
+    }
   }
 }

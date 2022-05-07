@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
 import { ErrorResponse } from '../shared/errorResponse';
@@ -14,6 +15,16 @@ export class GroupService {
     private httpClient: HttpClient,
     private authService: AuthService
   ) {}
+
+  private groupSubject: BehaviorSubject<Group> = new BehaviorSubject<Group>(null);
+
+  public group: Observable<Group> = this.groupSubject.asObservable();
+
+  public get ActiveGroup(): Group {
+    return this.groupSubject.value;
+  }
+
+
 
   GetAllGroups() {
     return this.httpClient.get<GroupResponse>(
@@ -49,7 +60,7 @@ export class GroupService {
       `${environment.apiUrl}/group/invite`,
       {
         NewMemberEmail: email,
-        GroupId: theGroup.id,
+        GroupId: theGroup.securityStamp,
         Message: message,
         AccessLevel: 'read_write',
         RegisterEndpoint: 'http://localhost:4200/auth/register'
@@ -61,5 +72,9 @@ export class GroupService {
         },
       }
     );
+  }
+
+  UpdateCurrentGroup(newGroup:Group){
+    this.groupSubject.next(newGroup);
   }
 }

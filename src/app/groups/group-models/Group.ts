@@ -1,6 +1,6 @@
 
 export interface Group{
-  id: number;
+  securityStamp: string;
   name: string;
   description: string;
 }
