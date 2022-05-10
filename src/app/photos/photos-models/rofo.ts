@@ -2,12 +2,12 @@ import { Group } from 'src/app/groups/group-models/Group';
 import { RofoComment } from './rofoComment';
 
 export interface Rofo {
-  Description: string;
-  UploadedBy: {
-    UserName: string;
+  description: string;
+  uploadedBy: {
+    userName: string;
   };
-  Group: Group;
-  Comments: RofoComment[];
-  UploadedDate: Date;
-  SecurityStamp: string;
+  group: Group;
+  comments: RofoComment[];
+  uploadedDate: Date;
+  securityStamp: string;
 }

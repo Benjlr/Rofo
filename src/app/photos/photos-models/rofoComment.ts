@@ -1,8 +1,8 @@
 export interface RofoComment{
-  UploadedBy:{
-    UserName:string;
+  uploadedBy:{
+    userName:string;
   };
-  UploadedDateTime: Date;
-  Text:string;
+  uploadedDateTime: Date;
+  text:string;
 }
 

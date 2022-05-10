@@ -7,13 +7,11 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { GroupedObservable, interval, Observable, timer } from 'rxjs';
-import { Group } from 'src/app/groups/group-models/Group';
+import { interval, Observable } from 'rxjs';
 import { GroupService } from 'src/app/groups/group.service';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { ErrorResponse } from 'src/app/shared/errorResponse';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
-import { PhotoModule } from '../photo.module';
 import { PhotoService } from '../photo.service';
 
 @Component({
@@ -63,7 +61,7 @@ export class AddPhotoComponent implements OnInit {
         } else {
           this.alertHost.viewcontainerRef.clear();
           this.success = 'Uploaded!';
-          interval(1800).subscribe(x=> this.photoService.GetPhotos());
+          interval(1800).subscribe(x=> this.photoService.GetAllPhotoContainers());
         }
       },
       (err) => {

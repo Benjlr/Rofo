@@ -1,53 +1,69 @@
-
 import { Component, OnInit } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { promise } from 'protractor';
 import { AddPhotoComponent } from '../add-photo/add-photo.component';
 import { PhotoService } from '../photo.service';
+import { Rofo } from '../photos-models/rofo';
 
 @Component({
   selector: 'app-photos',
   templateUrl: './view-photos.component.html',
-  styleUrls: ['./view-photos.component.css']
+  styleUrls: ['./view-photos.component.css'],
 })
 export class ViewPhotosComponent implements OnInit {
+  loadedPhotos: Rofo[] = [];
+  loadedPhotosData: string[] = [];
 
-  drafting:boolean = false;
+  drafting: boolean = false;
   constructor(
-    private photoService : PhotoService,
+    private photoService: PhotoService,
     private modalService: NgbModal
-    ) { }
-
-  ngOnInit(): void {
+  ) {
+    this.GetPhotos();
   }
 
-  Photos(){
-    return this.photoService.GetPhotos();
+  ngOnInit(): void {}
+
+  GetPhotos() {
+    let retVal = this.photoService.GetAllPhotoContainers();
+    return retVal.subscribe((returnValue) => {
+      this.loadedPhotos = returnValue.rofos;
+      this.loadedPhotos.forEach((x) => {
+        this.photoService.GetPhotoData(x.securityStamp).subscribe((y) => {
+          this.loadedPhotosData.push(y.data);
+        });
+      });
+    });
   }
 
-  Comments(){
-    return this.photoService.GetComments();
+  PhotoSource(stamp: string) {
+    this.photoService.GetPhotoData(stamp).subscribe((x) => {
+      return x.data;
+    });
   }
 
-  DraftComment(photo:string){
-    this.drafting= true;
+  DraftComment(photo: string): void {
+    this.drafting = true;
   }
 
   openModal() {
-    const modalRef = this.modalService.open(AddPhotoComponent,
-      {
-        centered: true,
-        windowClass: 'myCustomModalClass',
-        size: 'md'
-        // keyboard: false,
-        // backdrop: 'static'
-      });
+    const modalRef = this.modalService.open(AddPhotoComponent, {
+      centered: true,
+      windowClass: 'myCustomModalClass',
+      size: 'md',
+      // keyboard: false,
+      // backdrop: 'static'
+    });
 
     // let data = group;
     // modalRef.componentInstance.fromParent = data;
 
-    modalRef.result.then((result) => {
-      console.log(result);
-    }, (reason) => {
-    });
+    modalRef.result.then(
+      (result) => {
+        console.log(result);
+      },
+      (reason) => {}
+    );
   }
 }
+1;
