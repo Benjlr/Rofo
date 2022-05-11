@@ -17,7 +17,9 @@ export class ViewGroupsComponent implements OnInit {
     private groupService: GroupService,
     private modalService: NgbModal,
     private router: Router,
-    private cfr: ComponentFactoryResolver) {}
+    private cfr: ComponentFactoryResolver) {
+
+    }
 
   @ViewChild(DomPlaceHolder, { static: false })
   alertHost: DomPlaceHolder;
@@ -28,11 +30,16 @@ export class ViewGroupsComponent implements OnInit {
   myGroups: Group[];
 
   ngOnInit(): void {
+
+  }
+  ngAfterViewInit(): void {
+
     this.isLoading = true;
-    // this.showSpinner();
+    this.showSpinner();
 
     this.groupService.GetAllGroups().subscribe(
       (x) => {
+        console.log(x);
         this.isLoading = false;
 
         if (x.errors) {
