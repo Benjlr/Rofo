@@ -1,1 +1,7 @@
+.navbar-collapse.show{
+  margin-top: 5rem;
+}
 
+.navbar-collapse.collapsing{
+  margin-top: 5rem;
+}
