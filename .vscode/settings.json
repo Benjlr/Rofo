@@ -1,3 +1,5 @@
 {
-    "angular.enable-strict-mode-prompt": false
+    "angular.enable-strict-mode-prompt": false,
+    "appService.defaultWebAppToDeploy": "/subscriptions/d1050d7d-3738-4507-ba2e-824ddf19c255/resourceGroups/RofoGroup/providers/Microsoft.Web/sites/Rofos",
+    "appService.deploySubpath": "dist/rofo"
 }
