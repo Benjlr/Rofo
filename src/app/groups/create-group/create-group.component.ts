@@ -32,6 +32,7 @@ export class CreateGroupComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
+    console.log("clicked");
     if (!form.valid) {
       return;
     }

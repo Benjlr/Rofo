@@ -3,9 +3,7 @@ import { RofoComment } from './rofoComment';
 
 export interface Rofo {
   description: string;
-  uploadedBy: {
-    userName: string;
-  };
+  photoUploadedByUserName:string;
   group: Group;
   comments: RofoComment[];
   uploadedDate: Date;

@@ -6,11 +6,17 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./spinner.component.css']
 })
 export class SpinnerComponent implements OnInit {
-  @Input() showBackdrop = true;
+  @Input() showBackdrop;
 
-  constructor() { }
+  constructor() {
+    this.showBackdrop= true;
+
+   }
 
   ngOnInit(): void {
+    if(!this.showBackdrop){
+
+    }
   }
 
 }

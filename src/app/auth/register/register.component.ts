@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
+import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -71,7 +72,7 @@ export class RegisterComponent implements OnInit {
 
   RequestAccountConfirmationEmail(form: NgForm){
     let acoountConfirmObs : Observable< { errors: string } > = new Observable<{ errors: string }>();
-    acoountConfirmObs = this.authService.requestConfirmationEmail(form.value.email, form.value.password, 'auth/login');
+    acoountConfirmObs = this.authService.requestConfirmationEmail(form.value.email, form.value.password, `${environment.apiUrl}auth/login`);
     acoountConfirmObs.subscribe(
       (respData: { errors: string } ) => {
         console.log(respData.errors);
