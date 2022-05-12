@@ -128,7 +128,7 @@ export class AuthService {
 
   register(username: string, email: string, password: string) {
     return this.httpClient
-      .post<{ errors: string }>(`${environment.uiUrl}`, {
+      .post<{ errors: string }>(`${environment.apiUrl}`, {
         Username: username,
         Email: email,
         Password: password,
