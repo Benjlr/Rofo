@@ -63,7 +63,7 @@ export class GroupService {
         GroupId: theGroup.securityStamp,
         Message: message,
         AccessLevel: 'read_write',
-        RegisterEndpoint: `${environment.apiUrl}/auth/register`
+        RegisterEndpoint: `${environment.uiUrl}`
       },
       {
         withCredentials: true,
