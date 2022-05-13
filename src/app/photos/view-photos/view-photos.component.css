@@ -15,20 +15,24 @@ body{
 
 .float{
 	position:fixed;
-	width:100px;
-	height:100px;
-	bottom:40px;
-	right:40px;
+	width:5rem;
+	height:5rem;
+	bottom:2rem;
+	right:2rem;
 	background-color:#0C9;
 	color:#FFF;
-	border-radius:50px;
+	border-radius:2.5rem;
 	text-align:center;
 	box-shadow: 4px 4px 6px #999;
 }
 
 .my-float{
+	margin-top:2rem;
+	margin-left:0.15rem;
 
-	margin-top:40px;
-	margin-left:3px;
+}
+.fa-plus{
+  width: 2.5rem;
+	height:5rem;
 
 }

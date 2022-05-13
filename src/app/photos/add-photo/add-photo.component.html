@@ -1,4 +1,10 @@
-<ng-template appPlaceHolder></ng-template>
+<app-spinner
+[showBackdrop]="false"
+  #observer
+  *ngIf="isLoading"
+  class="card backdrop animate-opacity"
+  style="width: inherit; height: 30rem; justify-content: center;"
+></app-spinner>
 
 <main>
   <section class="section section-shaped section-md" >

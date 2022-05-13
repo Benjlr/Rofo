@@ -11,16 +11,31 @@ import { RofoUpload } from './photos-models/rofoUpload';
   providedIn: 'root',
 })
 export class PhotoService {
-
   async GetAllPhotoContainers(group: string) {
     let user = await this.authService.CurrentUser();
     return this.httpClient.get<{
       rofos: Rofo[];
-      rrors: string;
+      errors: string;
     }>(`${environment.apiUrl}/rofo/viewrofos`, {
       withCredentials: true,
       params: {
         GroupId: group,
+      },
+      headers: {
+        Authorization: 'Bearer ' + user.JwtToken,
+      },
+    });
+  }
+
+  async GetSinglePhotoContainer(photoId: string) {
+    let user = await this.authService.CurrentUser();
+    return this.httpClient.get<{
+      photo: Rofo;
+      errors: string;
+    }>(`${environment.apiUrl}/rofo/getrofo`, {
+      withCredentials: true,
+      params: {
+        GroupId: photoId,
       },
       headers: {
         Authorization: 'Bearer ' + user.JwtToken,
@@ -46,7 +61,7 @@ export class PhotoService {
 
   async UploadPhoto(photo: RofoUpload) {
     let user = await this.authService.CurrentUser();
-    return this.httpClient.post<ErrorResponse>(
+    return this.httpClient.post<{ errors: string; uploadedPhotoId: string }>(
       `${environment.apiUrl}/rofo/uploadrofo`,
       photo,
       {

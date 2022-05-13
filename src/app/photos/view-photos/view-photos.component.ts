@@ -12,29 +12,29 @@ import { Rofo } from '../photos-models/rofo';
 })
 export class ViewPhotosComponent implements OnInit {
   loadedPhotos: Rofo[] = [];
-  groupId:string;
+  groupId: string;
 
   constructor(
     private photoService: PhotoService,
     private modalService: NgbModal,
     private route: ActivatedRoute
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.groupId = params['groupId'];
-  })
-  this.GetPhotos();
-}
+    });
+    this.GetPhotos();
+  }
 
   async GetPhotos() {
-    console.log(this.groupId)
     let retVal = await this.photoService.GetAllPhotoContainers(this.groupId);
     return retVal.subscribe((returnValue) => {
       this.loadedPhotos = returnValue.rofos;
     });
   }
+
+  async GetSinglePhotos(photoId: string) {}
 
   openModal() {
     const modalRef = this.modalService.open(AddPhotoComponent, {
@@ -45,14 +45,22 @@ export class ViewPhotosComponent implements OnInit {
       // backdrop: 'static'
     });
 
-    // let data = group;
-    // modalRef.componentInstance.fromParent = data;
+    modalRef.componentInstance.groupId = this.groupId;
 
     modalRef.result.then(
       (result) => {
         console.log(result);
       },
-      (reason) => {}
+      async (reason) => {
+        if (modalRef.componentInstance.uploadedId) {
+          let retVal = await this.photoService.GetSinglePhotoContainer(
+            modalRef.componentInstance.uploadedId
+          );
+          return retVal.subscribe((returnValue) => {
+            this.loadedPhotos.push(returnValue.photo);
+          });
+        }
+      }
     );
   }
 }

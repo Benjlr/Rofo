@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Observable } from 'rxjs';
+import { interval, Observable, Subject } from 'rxjs';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { ErrorResponse } from 'src/app/shared/errorResponse';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
@@ -20,61 +20,65 @@ import { Rofo } from '../photos-models/rofo';
   styleUrls: ['./add-photo.component.css'],
 })
 export class AddPhotoComponent implements OnInit {
-  @Input() fromParent:Rofo;
+  @Input() groupId: string;
+  uploadedId: string;
 
   focus: any;
   focus1: any;
   error: string = '';
   isLoading = false;
   success: string = '';
-  @ViewChild(DomPlaceHolder, { static: false })
-  alertHost: DomPlaceHolder;
+  public onClose: Subject<string>;
 
   constructor(
     private photoService: PhotoService,
-    public activeModal: NgbActiveModal,
-    private cfr: ComponentFactoryResolver
+    public activeModal: NgbActiveModal
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.onClose = new Subject();
+  }
 
- async onSubmit(form: NgForm) {
+  async onSubmit(form: NgForm) {
+    if (!this.imageSrc) {
+      this.error = 'No image';
+      return;
+    }
+
     if (!form.valid) {
       return;
     }
-    this.isLoading = true;
-    this.showSpinner();
 
-    let signInObs: Observable<ErrorResponse> = new Observable<ErrorResponse>();
-    signInObs = await this.photoService.UploadPhoto({
+    this.success = '';
+    this.error = '';
+    this.isLoading = true;
+
+    let addPhotoOb: Observable<{ errors: string; uploadedPhotoId: string }> =
+      new Observable<{ errors: string; uploadedPhotoId: string }>();
+    addPhotoOb = await this.photoService.UploadPhoto({
       Photo: this.imageSrc,
       Description: form.value.photoDesc,
-      GroupId: this.fromParent.group.securityStamp,
+      GroupId: this.groupId,
     });
-    signInObs.subscribe(
-      (respData: ErrorResponse) => {
-        console.log(respData);
+    addPhotoOb.subscribe(
+      (respData) => {
         this.isLoading = false;
         if (respData.errors) {
           this.error = respData.errors;
         } else {
-          this.alertHost.viewcontainerRef.clear();
           this.success = 'Uploaded!';
+          this.uploadedId = respData.uploadedPhotoId;
+          setTimeout(() => {
+            this.activeModal.dismiss();
+          }, 1500);
         }
       },
       (err) => {
         console.log(err.message ?? err);
         this.error = err.message ?? err;
         this.isLoading = false;
-        this.alertHost.viewcontainerRef.clear();
       }
     );
-  }
-
-  private showSpinner() {
-    const alertCompFact = this.cfr.resolveComponentFactory(SpinnerComponent);
-    const hostViewRef = this.alertHost.viewcontainerRef;
-    const componentRef = hostViewRef.createComponent(alertCompFact);
   }
 
   myFile: File;
