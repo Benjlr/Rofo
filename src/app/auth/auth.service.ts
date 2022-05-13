@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { AuthResponse } from './AuthData/AuthenticateResponse';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class AuthService  {
   private userCache: CachedUserData[] =
     JSON.parse(localStorage.getItem('Rofo-Users')) ?? [];
 
@@ -18,13 +18,19 @@ export class AuthService {
 
   public user: Observable<User> = this.userSubject.asObservable();
 
-  public get CurrentUser(): User {
+  public async CurrentUser(): Promise<User> {
+    if (!this.userSubject.value &&  this.userCache?.length) {
+      let lastUser = this.userCache[this.userCache.length - 1];
+      await this.refreshToken(
+     lastUser.refreshTokens[lastUser.refreshTokens.length - 1]);
+
+    }
     return this.userSubject.value;
   }
 
   public get CurrentUserRefreshToken(): string {
     let user = this.userCache.find(
-      (x: CachedUserData) => x.email === this.CurrentUser?.email
+      (x: CachedUserData) => x.email === this.userSubject.value?.email
     );
     if (user !== undefined) {
       return user.refreshTokens[user.refreshTokens.length - 1];
@@ -32,13 +38,7 @@ export class AuthService {
   }
 
   constructor(private router: Router, private httpClient: HttpClient) {
-    if (this.userCache?.length) {
-      let lastUser = this.userCache[this.userCache.length - 1];
-      this.refreshToken(
-        lastUser.refreshTokens[lastUser.refreshTokens.length - 1],
-        true
-      ).subscribe();
-    }
+
   }
 
   // autoLogin() {
@@ -128,7 +128,7 @@ export class AuthService {
 
   register(username: string, email: string, password: string) {
     return this.httpClient
-      .post<{ errors: string }>(`${environment.apiUrl}`, {
+      .post<{ errors: string }>(`${environment.apiUrl}/register`, {
         Username: username,
         Email: email,
         Password: password,
@@ -161,7 +161,9 @@ export class AuthService {
       );
   }
 
-  refreshToken(refreshToken: string, redirectToHome: boolean = false) {
+   refreshToken(refreshToken: string): Promise<RefreshTokenResponse> {
+
+
     return this.httpClient
       .post<RefreshTokenResponse>(`${environment.apiUrl}/Token/refresh-token`, {
         Token: refreshToken,
@@ -184,9 +186,6 @@ export class AuthService {
             );
             localStorage.setItem('Rofo-Users', JSON.stringify(this.userCache));
             this.startRefreshTokenTimer();
-            if (redirectToHome) {
-              this.router.navigate(['']);
-            }
             console.log('REFRESHED');
           } else {
             this.stopRefreshTokenTimer();
@@ -196,24 +195,24 @@ export class AuthService {
 
           return resp;
         })
-      );
+      ).toPromise();
   }
 
   private refreshTokenTimeout: any;
 
   private startRefreshTokenTimer() {
     // parse json object from base64 encoded jwt token
-    console.log(this.CurrentUser?.JwtToken?.split('.')[1] ?? '');
+    console.log(this.userSubject.value?.JwtToken?.split('.')[1] ?? '');
 
     const jwtToken = JSON.parse(
-      atob(this.CurrentUser?.JwtToken?.split('.')[1] ?? '')
+      atob(this.userSubject.value?.JwtToken?.split('.')[1] ?? '')
     );
 
     // set a timeout to refresh the token a minute before it expires
     const expires = new Date(jwtToken.exp * 1000);
     const timeout = expires.getTime() - Date.now() - 60 * 1000;
     this.refreshTokenTimeout = setTimeout(
-      () => this.refreshToken(this.CurrentUserRefreshToken).subscribe(),
+      () => this.refreshToken(this.CurrentUserRefreshToken),
       timeout
     );
   }

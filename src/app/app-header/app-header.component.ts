@@ -16,10 +16,10 @@ export class AppHeaderComponent implements OnInit, OnDestroy {
   constructor(public authService: AuthService) {}
 
   ngOnInit(): void {
-    this.currentUserSub = this.authService.user.subscribe((user) => {
+    this.currentUserSub = this.authService.user.subscribe(async (user) => {
       if(user){
         this.userAuthenticated = true;
-        this.userName = this.authService.CurrentUser.username;
+        this.userName = (await this.authService.CurrentUser()).username;
       }
     });
   }

@@ -58,8 +58,6 @@ export class RegisterComponent implements OnInit {
           this.RequestAccountConfirmationEmail(form);
         }
         this.alertHost.viewcontainerRef.clear();
-        this.router.navigate(['']);
-
       },
       (err) => {
         console.log(err.message ?? err);
@@ -72,7 +70,7 @@ export class RegisterComponent implements OnInit {
 
   RequestAccountConfirmationEmail(form: NgForm){
     let acoountConfirmObs : Observable< { errors: string } > = new Observable<{ errors: string }>();
-    acoountConfirmObs = this.authService.requestConfirmationEmail(form.value.email, form.value.password, `${environment.uiUrl}`);
+    acoountConfirmObs = this.authService.requestConfirmationEmail(form.value.email, form.value.password, ``);
     acoountConfirmObs.subscribe(
       (respData: { errors: string } ) => {
         console.log(respData.errors);

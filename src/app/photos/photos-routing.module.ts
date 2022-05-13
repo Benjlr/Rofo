@@ -1,21 +1,19 @@
-import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
-import { AuthGuard } from "../auth/auth.guard";
-import { ViewPhotosComponent } from "./view-photos/view-photos.component";
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { AuthGuard } from '../auth/auth.guard';
+import { ViewPhotosComponent } from './view-photos/view-photos.component';
 
-const routes =[
+const routes = [
+
   {
-    path:"",
+    path: 'view/:groupId',
+    component: ViewPhotosComponent,
     //canActivate: [AuthGuard],
-    children:[
-      {path:"view", component: ViewPhotosComponent},
-    ]
-  }
-]
+  },
+];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
 })
-
-export class PhotosRoutingModule{}
-
+export class PhotosRoutingModule {}

@@ -7,55 +7,48 @@ import { ErrorResponse } from '../shared/errorResponse';
 import { Group } from './group-models/Group';
 import { GroupResponse } from './group-models/GroupResponse';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable(
+  {providedIn: 'root'}
+)
 export class GroupService {
   constructor(
     private httpClient: HttpClient,
     private authService: AuthService
   ) {}
 
-  private groupSubject: BehaviorSubject<Group> = new BehaviorSubject<Group>(null);
-
-  public group: Observable<Group> = this.groupSubject.asObservable();
-
-  public get ActiveGroup(): Group {
-    return this.groupSubject.value;
-  }
-
-
-
-  GetAllGroups() {
+  async GetAllGroups() {
+    let user = await this.authService.CurrentUser();
     return this.httpClient.get<GroupResponse>(
       `${environment.apiUrl}/group/get`,
       {
         withCredentials: true,
         headers: {
-          Authorization: 'Bearer ' + this.authService.CurrentUser.JwtToken,
+          Authorization: 'Bearer ' + user.JwtToken,
         },
       }
     );
   }
 
-  CreateGroup(groupName: string, description: string) {
+  async CreateGroup(groupName: string, description: string) {
+    let user = await this.authService.CurrentUser();
     return this.httpClient.post<ErrorResponse>(
       `${environment.apiUrl}/group/create`,
       {
-        Email: this.authService.CurrentUser.email,
+        Email: user.email,
         GroupName: groupName,
         Description: description,
       },
       {
         withCredentials: true,
         headers: {
-          Authorization: 'Bearer ' + this.authService.CurrentUser.JwtToken,
+          Authorization: 'Bearer ' + user.JwtToken,
         },
       }
     );
   }
 
-  InviteToGroup(email: string, message:string, theGroup: Group) {
+  async InviteToGroup(email: string, message:string, theGroup: Group) {
+    let user = await this.authService.CurrentUser();
     return this.httpClient.post<ErrorResponse>(
       `${environment.apiUrl}/group/invite`,
       {
@@ -68,13 +61,10 @@ export class GroupService {
       {
         withCredentials: true,
         headers: {
-          Authorization: 'Bearer ' + this.authService.CurrentUser.JwtToken,
+          Authorization: 'Bearer ' + user.JwtToken,
         },
       }
     );
   }
 
-  UpdateCurrentGroup(newGroup:Group){
-    this.groupSubject.next(newGroup);
-  }
 }

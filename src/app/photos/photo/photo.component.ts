@@ -37,12 +37,14 @@ export class PhotoComponent {
       .subscribe();
   }
 
-  PhotoSource() {
-    this.photoService
+  async PhotoSource() {
+    await this.photoService
       .GetPhotoData(this.myPhoto.securityStamp)
-      .subscribe((x) => {
-        this.imageToShow = x.data;
-        this.isImageLoading = false;
+      .then((x) => {
+        x.subscribe((result) => {
+          this.imageToShow = result.data;
+          this.isImageLoading = false;
+        });
       });
   }
 
@@ -50,22 +52,29 @@ export class PhotoComponent {
     this.drafting = true;
   }
 
-  onSubmit(form: NgForm) {
+  async onSubmit(form: NgForm) {
     if (!form.valid) {
       return;
     }
 
     let commentObs: Observable<ErrorResponse> = new Observable<ErrorResponse>();
-    commentObs = this.photoService.UploadComment(form.value.commentInput, this.myPhoto.securityStamp);
+    commentObs = await this.photoService.UploadComment(
+      form.value.commentInput,
+      this.myPhoto.securityStamp
+    );
     commentObs.subscribe(
       (respData: ErrorResponse) => {
         if (respData.errors) {
           console.log(respData);
           this.errorMessage = respData.errors;
         }
-        this.photoService.GetComments(this.myPhoto.securityStamp).subscribe((result)=>{
-          this.myPhoto.comments = result.comments;
-        })
+        this.photoService
+          .GetComments(this.myPhoto.securityStamp)
+          .then(async (CommentResult) => {
+            CommentResult.subscribe((comments) => {
+              this.myPhoto.comments = comments.comments;
+            });
+          });
       },
       (err) => {
         console.log(err);
@@ -75,8 +84,7 @@ export class PhotoComponent {
     this.drafting = false;
   }
 
-  clearError(){
+  clearError() {
     this.errorMessage = null;
-
   }
 }

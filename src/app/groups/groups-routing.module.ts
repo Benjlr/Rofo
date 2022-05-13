@@ -6,17 +6,17 @@ import { ViewGroupsComponent } from "./view-groups/view-groups.component";
 
 const routes =[
   {
-    path:"",
-    canActivate: [AuthGuard],
-    children:[
-      {path:"view", component: ViewGroupsComponent},
-      {path:"create", component: CreateGroupComponent}
-    ]
-  }
+    path:'',
+    component: ViewGroupsComponent,
+    //canActivate: [AuthGuard],
+  },
+  {path:'create', component: CreateGroupComponent}
+
 ]
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)]
+  imports: [RouterModule.forChild(routes)],
+  exports:[RouterModule]
 })
 
 export class GroupsRoutingModule{}

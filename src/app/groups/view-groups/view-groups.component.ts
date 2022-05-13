@@ -1,5 +1,10 @@
-import { Component, ComponentFactoryResolver, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import {
+  Component,
+  ComponentFactoryResolver,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
@@ -16,10 +21,8 @@ export class ViewGroupsComponent implements OnInit {
   constructor(
     private groupService: GroupService,
     private modalService: NgbModal,
-    private router: Router,
-    private cfr: ComponentFactoryResolver) {
-
-    }
+    private cfr: ComponentFactoryResolver
+  ) {}
 
   @ViewChild(DomPlaceHolder, { static: false })
   alertHost: DomPlaceHolder;
@@ -29,15 +32,13 @@ export class ViewGroupsComponent implements OnInit {
 
   myGroups: Group[];
 
-  ngOnInit(): void {
-
-  }
-  ngAfterViewInit(): void {
-
+  ngOnInit(): void {}
+  async ngAfterViewInit(): Promise<any> {
+    console.log('here');
     this.isLoading = true;
     this.showSpinner();
 
-    this.groupService.GetAllGroups().subscribe(
+    (await this.groupService.GetAllGroups()).subscribe(
       (x) => {
         console.log(x);
         this.isLoading = false;
@@ -65,27 +66,23 @@ export class ViewGroupsComponent implements OnInit {
     const componentRef = hostViewRef.createComponent(alertCompFact);
   }
 
-  goToPhotos(group:Group){
-    this.groupService.UpdateCurrentGroup(group);
-    this.router.navigate(["../photos/view"]);
-  }
-
   openModal(group: Group) {
-    const modalRef = this.modalService.open(InviteModalComponent,
-      {
-        centered: true,
-        windowClass: 'myCustomModalClass',
-        size: 'md'
-        // keyboard: false,
-        // backdrop: 'static'
-      });
+    const modalRef = this.modalService.open(InviteModalComponent, {
+      centered: true,
+      windowClass: 'myCustomModalClass',
+      size: 'md',
+      // keyboard: false,
+      // backdrop: 'static'
+    });
 
     let data = group;
 
     modalRef.componentInstance.fromParent = data;
-    modalRef.result.then((result) => {
-      console.log(result);
-    }, (reason) => {
-    });
+    modalRef.result.then(
+      (result) => {
+        console.log(result);
+      },
+      (reason) => {}
+    );
   }
 }

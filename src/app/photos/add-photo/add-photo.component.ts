@@ -7,12 +7,12 @@ import {
 } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { interval, Observable } from 'rxjs';
-import { GroupService } from 'src/app/groups/group.service';
+import { Observable } from 'rxjs';
 import { DomPlaceHolder } from 'src/app/shared/domplaceholder.directive';
 import { ErrorResponse } from 'src/app/shared/errorResponse';
 import { SpinnerComponent } from 'src/app/shared/spinner/spinner.component';
 import { PhotoService } from '../photo.service';
+import { Rofo } from '../photos-models/rofo';
 
 @Component({
   selector: 'app-add-photo',
@@ -20,7 +20,7 @@ import { PhotoService } from '../photo.service';
   styleUrls: ['./add-photo.component.css'],
 })
 export class AddPhotoComponent implements OnInit {
-  @Input() fromParent;
+  @Input() fromParent:Rofo;
 
   focus: any;
   focus1: any;
@@ -32,14 +32,13 @@ export class AddPhotoComponent implements OnInit {
 
   constructor(
     private photoService: PhotoService,
-    private groupService: GroupService,
     public activeModal: NgbActiveModal,
     private cfr: ComponentFactoryResolver
   ) {}
 
   ngOnInit(): void {}
 
-  onSubmit(form: NgForm) {
+ async onSubmit(form: NgForm) {
     if (!form.valid) {
       return;
     }
@@ -47,10 +46,10 @@ export class AddPhotoComponent implements OnInit {
     this.showSpinner();
 
     let signInObs: Observable<ErrorResponse> = new Observable<ErrorResponse>();
-    signInObs = this.photoService.UploadPhoto({
+    signInObs = await this.photoService.UploadPhoto({
       Photo: this.imageSrc,
       Description: form.value.photoDesc,
-      GroupId: this.groupService.ActiveGroup.securityStamp,
+      GroupId: this.fromParent.group.securityStamp,
     });
     signInObs.subscribe(
       (respData: ErrorResponse) => {
@@ -61,7 +60,6 @@ export class AddPhotoComponent implements OnInit {
         } else {
           this.alertHost.viewcontainerRef.clear();
           this.success = 'Uploaded!';
-          interval(1800).subscribe(x=> this.photoService.GetAllPhotoContainers());
         }
       },
       (err) => {

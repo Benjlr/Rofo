@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { AddPhotoComponent } from '../add-photo/add-photo.component';
 import { PhotoService } from '../photo.service';
@@ -11,18 +12,25 @@ import { Rofo } from '../photos-models/rofo';
 })
 export class ViewPhotosComponent implements OnInit {
   loadedPhotos: Rofo[] = [];
+  groupId:string;
 
   constructor(
     private photoService: PhotoService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private route: ActivatedRoute
   ) {
-    this.GetPhotos();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.route.params.subscribe((params: Params) => {
+      this.groupId = params['groupId'];
+  })
+  this.GetPhotos();
+}
 
-  GetPhotos() {
-    let retVal = this.photoService.GetAllPhotoContainers();
+  async GetPhotos() {
+    console.log(this.groupId)
+    let retVal = await this.photoService.GetAllPhotoContainers(this.groupId);
     return retVal.subscribe((returnValue) => {
       this.loadedPhotos = returnValue.rofos;
     });
@@ -48,4 +56,3 @@ export class ViewPhotosComponent implements OnInit {
     );
   }
 }
-1;

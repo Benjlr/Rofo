@@ -37,7 +37,7 @@ export class InviteModalComponent implements OnInit {
     this.selectedGroup = this.fromParent;
     console.log(this.selectedGroup);
   }
-  onSubmit(form: NgForm) {
+  async onSubmit(form: NgForm) {
     if (!form.valid) {
       return;
     }
@@ -46,7 +46,7 @@ export class InviteModalComponent implements OnInit {
 
 
     let signInObs: Observable<ErrorResponse> = new Observable<ErrorResponse>();
-    signInObs = this.groupService.InviteToGroup(
+    signInObs = await this.groupService.InviteToGroup(
       form.value.email,
       form.value.emailMessage,
       this.selectedGroup);

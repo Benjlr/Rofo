@@ -7,6 +7,7 @@ import { CreateGroupComponent } from "./create-group/create-group.component";
 import { GroupsRoutingModule } from "./groups-routing.module";
 import { ViewGroupsComponent } from "./view-groups/view-groups.component";
 import { InviteModalComponent } from './view-groups/invite-modal/invite-modal.component';
+import { GroupService } from "./group.service";
 
 @NgModule({
   declarations: [
@@ -16,12 +17,11 @@ import { InviteModalComponent } from './view-groups/invite-modal/invite-modal.co
   ],
   imports:[
     RouterModule,
-    GroupsRoutingModule,
+   GroupsRoutingModule,
     FormsModule,
     SharedModule
   ],
   providers:[
-
   ]
 })
 export class GroupsModule{}

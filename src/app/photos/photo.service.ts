@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../auth/auth.service';
-import { GroupService } from '../groups/group.service';
 import { ErrorResponse } from '../shared/errorResponse';
 import { Rofo } from './photos-models/rofo';
 import { RofoComment } from './photos-models/rofoComment';
@@ -12,22 +11,25 @@ import { RofoUpload } from './photos-models/rofoUpload';
   providedIn: 'root',
 })
 export class PhotoService {
-  GetAllPhotoContainers() {
+
+  async GetAllPhotoContainers(group: string) {
+    let user = await this.authService.CurrentUser();
     return this.httpClient.get<{
       rofos: Rofo[];
       rrors: string;
     }>(`${environment.apiUrl}/rofo/viewrofos`, {
       withCredentials: true,
       params: {
-        GroupId: this.groupService.ActiveGroup.securityStamp ?? '',
+        GroupId: group,
       },
       headers: {
-        Authorization: 'Bearer ' + this.authService.CurrentUser.JwtToken,
+        Authorization: 'Bearer ' + user.JwtToken,
       },
     });
   }
 
-  GetPhotoData(photoId: string) {
+  async GetPhotoData(photoId: string) {
+    let user = await this.authService.CurrentUser();
     return this.httpClient.get<{
       errors: string;
       data: string;
@@ -37,61 +39,60 @@ export class PhotoService {
         PhotoId: photoId,
       },
       headers: {
-        Authorization: 'Bearer ' + this.authService.CurrentUser.JwtToken,
+        Authorization: 'Bearer ' + user.JwtToken,
       },
     });
   }
 
-  UploadPhoto(photo: RofoUpload) {
+  async UploadPhoto(photo: RofoUpload) {
+    let user = await this.authService.CurrentUser();
     return this.httpClient.post<ErrorResponse>(
       `${environment.apiUrl}/rofo/uploadrofo`,
       photo,
       {
         withCredentials: true,
         headers: {
-          Authorization: 'Bearer ' + this.authService.CurrentUser.JwtToken,
+          Authorization: 'Bearer ' + user.JwtToken,
         },
       }
     );
   }
 
-  UploadComment(comment: string, photo: string) {
+  async UploadComment(comment: string, photo: string) {
+    let user = await this.authService.CurrentUser();
     return this.httpClient.post<ErrorResponse>(
-      `${environment.apiUrl}/rofo/comment`,{
+      `${environment.apiUrl}/rofo/comment`,
+      {
         photoId: photo,
-        text: comment
+        text: comment,
       },
       {
         withCredentials: true,
         headers: {
-          Authorization: 'Bearer ' + this.authService.CurrentUser.JwtToken,
+          Authorization: 'Bearer ' + user.JwtToken,
         },
       }
     );
   }
 
-  GetComments(photo: string) {
+  async GetComments(photo: string) {
+    let user = await this.authService.CurrentUser();
     return this.httpClient.get<{
-      comments: RofoComment[],
-      errors: string
-    }>(
-      `${environment.apiUrl}/rofo/getcomments`,
-      {
-        withCredentials: true,
-        params: {
-          PhotoId: photo,
-        },
-        headers: {
-          Authorization: 'Bearer ' + this.authService.CurrentUser.JwtToken,
-        },
-      }
-    );
+      comments: RofoComment[];
+      errors: string;
+    }>(`${environment.apiUrl}/rofo/getcomments`, {
+      withCredentials: true,
+      params: {
+        PhotoId: photo,
+      },
+      headers: {
+        Authorization: 'Bearer ' + user.JwtToken,
+      },
+    });
   }
-
 
   constructor(
     private httpClient: HttpClient,
-    private authService: AuthService,
-    private groupService: GroupService
+    private authService: AuthService
   ) {}
 }

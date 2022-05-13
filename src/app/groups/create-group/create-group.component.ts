@@ -31,7 +31,7 @@ export class CreateGroupComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit(form: NgForm) {
+  async onSubmit(form: NgForm) {
     console.log("clicked");
     if (!form.valid) {
       return;
@@ -40,7 +40,7 @@ export class CreateGroupComponent implements OnInit {
     this.showSpinner();
 
     let groupObs: Observable<ErrorResponse> = new Observable<ErrorResponse>();
-    groupObs = this.groupService.CreateGroup(form.value.name, form.value.description);
+    groupObs = await this.groupService.CreateGroup(form.value.name, form.value.description);
     groupObs.subscribe(
       ( respData: ErrorResponse) => {
         console.log(respData);
