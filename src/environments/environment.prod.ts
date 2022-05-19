@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://rofoserver20220511205842.azurewebsites.net',
-  uiUrl: 'https://rofos.azurewebsites.net'
+  apiUrl: 'https://rofo-api.azurewebsites.net',
+  uiUrl: 'https://rofo.azurewebsites.net'
 };

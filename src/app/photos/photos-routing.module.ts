@@ -8,7 +8,7 @@ const routes = [
   {
     path: 'view/:groupId',
     component: ViewPhotosComponent,
-    //canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
 ];
 

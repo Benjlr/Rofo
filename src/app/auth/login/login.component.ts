@@ -53,10 +53,11 @@ export class LoginComponent implements OnInit {
       (respData: AuthResponse) => {
         console.log(respData);
         this.isLoading = false;
+        this.alertHost.viewcontainerRef.clear();
         if (respData.errors) {
           this.error = respData.errors;
+          return;
         }
-        this.alertHost.viewcontainerRef.clear();
         this.router.navigate(['groups'])
       },
       (err) => {

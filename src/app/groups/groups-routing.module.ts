@@ -8,7 +8,7 @@ const routes =[
   {
     path:'',
     component: ViewGroupsComponent,
-    //canActivate: [AuthGuard],
+    canActivate: [AuthGuard],
   },
   {path:'create', component: CreateGroupComponent}
 
